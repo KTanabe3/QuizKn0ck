@@ -108,5 +108,22 @@ def users_id_post_edit(id):
     db.session.commit()
     return redirect(url_for('users_get'))
 
+
+@app.route("/quiz",methods=['GET'])
+def quiz_get():
+    return render_template('answer_quiz.html')
+
+@app.route("/make",methods=['GET'])
+def make_get():
+    return render_template('make_quiz.html')
+
+@app.route("/view",methods=['GET'])
+def view_get():
+    return render_template('view_answer.html')
+
+@app.route("/owner_view",methods=['GET'])
+def owner_view_get():
+    return render_template('view_other_answer.html')
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)
