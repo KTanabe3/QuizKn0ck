@@ -39,17 +39,17 @@ class User(UserMixin, db.Model):
 def load_user(id):
     return User.query.get(int(id))
 
-@app.route('/',methods=['GET'])
+@app.route('/home',methods=['GET'])
 @login_required
-def index_get():
-    return render_template('index.html')
+def home_get():
+    return render_template('home.html')
 
 @app.route('/login', methods=['GET'])
 def login_get():
     # 現在のユーザーがログイン済みの場合
     if current_user.is_authenticated:
         # トップページに移動
-        return redirect(url_for('index_get'))
+        return redirect(url_for('home_get'))
     # loginページのテンプレートを返す
     return render_template('login.html')
 
@@ -67,14 +67,14 @@ def login_post():
     # ログインを承認
     login_user(user)
     # トップページへリダイレクト
-    return redirect(url_for('index_get'))
+    return redirect(url_for('home_get'))
 
 @app.route('/logout')
 def logout():
   # logout_user関数を呼び出し
   logout_user()
   # トップページにリダイレクト
-  return redirect(url_for('index_get'))
+  return redirect(url_for('home_get'))
 
 @app.route("/users",methods=['GET'])
 def users_get():
