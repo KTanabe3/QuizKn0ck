@@ -39,17 +39,17 @@ class User(UserMixin, db.Model):
 def load_user(id):
     return User.query.get(int(id))
 
-@app.route('/',methods=['GET'])
+@app.route('/home',methods=['GET'])
 @login_required
-def index_get():
-    return render_template('index.html')
+def home_get():
+    return render_template('home.html')
 
 @app.route('/login', methods=['GET'])
 def login_get():
     # 現在のユーザーがログイン済みの場合
     if current_user.is_authenticated:
         # トップページに移動
-        return redirect(url_for('index_get'))
+        return redirect(url_for('home_get'))
     # loginページのテンプレートを返す
     return render_template('login.html')
 
@@ -67,14 +67,14 @@ def login_post():
     # ログインを承認
     login_user(user)
     # トップページへリダイレクト
-    return redirect(url_for('index_get'))
+    return redirect(url_for('home_get'))
 
 @app.route('/logout')
 def logout():
   # logout_user関数を呼び出し
   logout_user()
   # トップページにリダイレクト
-  return redirect(url_for('index_get'))
+  return redirect(url_for('home_get'))
 
 @app.route("/users",methods=['GET'])
 def users_get():
@@ -107,6 +107,23 @@ def users_id_post_edit(id):
     db.session.merge(user)
     db.session.commit()
     return redirect(url_for('users_get'))
+
+
+@app.route("/quiz",methods=['GET'])
+def quiz_get():
+    return render_template('answer_quiz.html')
+
+@app.route("/make",methods=['GET'])
+def make_get():
+    return render_template('make_quiz.html')
+
+@app.route("/view",methods=['GET'])
+def view_get():
+    return render_template('view_answer.html')
+
+@app.route("/owner_view",methods=['GET'])
+def owner_view_get():
+    return render_template('view_other_answer.html')
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)
