@@ -33,6 +33,40 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
+# クイズテーブル
+class Quiz(db.Model):
+    __tablename__ = 'Quizes'
+    #問題のID
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    #問題のタイトル
+    title = db.Column(db.String(128))
+    #問題の本文
+    text = db.Column(db.String(128))
+    #問題の正答
+    ans = db.Column(db.String(128))
+    #以下ダミー候補
+    cand1 = db.Column(db.String(128))
+    cand2 = db.Column(db.String(128))
+    cand3 = db.Column(db.String(128))
+
+# 中間テーブル
+class Relation(db.Model):
+    __tablename__ = 'Relations'
+    id = db.Column(db.Integer, primary_key=True)
+    #問題セットのID
+    set = db.Column(db.Integer)
+    #問題のID
+    quiz = db.Column(db.Integer)
+
+class QuizSet(db.Model):
+    __tablename__ = 'QuizSets'
+    #問題セットのID
+    id = db.Column(db.Integer, primary_key=True)
+    #セット作成者のuserID
+    author = db.Column(db.Integer)
+    #問題セットのタイトル
+    title = db.Column(db.String(128))
+
 ### 実装する機能の設定 #########################
 
 @login.user_loader
@@ -125,5 +159,19 @@ def view_get():
 def owner_view_get():
     return render_template('view_other_answer.html')
 
+@app.route("/make", methods=['POST'])
+def make_quiz():
+    quiz = Quiz(
+        title=request.form["title"],
+        text=request.form["text"],
+        ans=request.form["ans"],
+        cand1=request.form["cand1"],
+        cand2=request.form["cand2"],
+        cand3=request.form["cand3"]
+    )
+    db.session.add(quiz)
+    db.session.commit()
+    return redirect(url_for('home_get'))
+    
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)
