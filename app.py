@@ -147,8 +147,12 @@ def quiz_get():
     quizzes = Quiz.query.all()
     return render_template('answer_quiz.html', quizzes=quizzes)
 
-@app.route("/make",methods=['GET'])
-def make_get():
+@app.route("/make/quizset",methods=['GET'])
+def make_quizset_get():
+    return render_template('make_quiz_set.html')
+
+@app.route("/make/quiz",methods=['GET'])
+def make_quiz_get():
     return render_template('make_quiz.html')
 
 @app.route("/view",methods=['GET'])
@@ -159,7 +163,16 @@ def view_get():
 def owner_view_get():
     return render_template('view_other_answer.html')
 
-@app.route("/make", methods=['POST'])
+@app.route("/make/quizset", methods=['POST'])
+def make_quizset():
+    quizset = Quizset(
+        title=request.form["title"]
+    )
+    db.session.add(quizset)
+    db.session.commit()
+    return redirect(url_for('home_get'))
+
+@app.route("/make/quiz", methods=['POST'])
 def make_quiz():
     quiz = Quiz(
         title=request.form["title"],
