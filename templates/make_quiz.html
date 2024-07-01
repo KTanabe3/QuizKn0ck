@@ -7,12 +7,12 @@
 </head>
 <body>
     <form action="/make" method="POST">
-        <div>タイトル:<input type="text" name="title"></input></div>
-        <div>問題文:<textarea name="text"></textarea></div>
-        <div>答え:<input type="text" name="ans"></input></div>
-        <div>答え(ダミー1):<input type="text" name="cand1"></input></div>
-        <div>答え(ダミー2):<input type="text" name="cand2"></input></div>
-        <div>答え(ダミー3):<input type="text" name="cand3"></input></div>
+        <div>タイトル:<input type="text" name="title" required></input></div>
+        <div>問題文:<textarea name="text" required></textarea></div>
+        <div>答え:<input type="text" name="ans" required></input></div>
+        <div>答え(ダミー1):<input type="text" name="cand1" required></input></div>
+        <div>答え(ダミー2):<input type="text" name="cand2" required></input></div>
+        <div>答え(ダミー3):<input type="text" name="cand3" required></input></div>
         <div>
             <input type="submit" value="送信">
             <input type="reset" value="取消">
