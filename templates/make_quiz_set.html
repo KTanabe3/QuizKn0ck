@@ -6,22 +6,12 @@
     <title>クイズセット作成</title>
 </head>
 <body>
-    <h1>問題一覧</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>問題ID</th>
-                <th>タイトル</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for quiz in quizzes %}
-            <tr>
-                <td>{{ quiz.id }}</td>
-                <td>{{ quiz.title }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <form action="/make/quizset" method="POST">
+        <div>タイトル:<input type="text" name="title" required></input></div>
+        <div>
+            <input type="submit" value="送信">
+            <input type="reset" value="取消">
+        </div>
+    </form>
 </body>
 </html>
