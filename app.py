@@ -33,9 +33,15 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
+# 関係テーブル(Quiz <--> QuizSet)
+quiz_quizsets = db.Table('quiz_quizsets',
+    db.Column('quiz_id', db.Integer, db.ForeignKey('Quizzes.id'), primary_key=True),
+    db.Column('quizset_id', db.Integer, db.ForeignKey('QuizSets.id'), primary_key=True)
+)
+
 # クイズテーブル
 class Quiz(db.Model):
-    __tablename__ = 'Quizes'
+    __tablename__ = 'Quizzes'
     #問題のID
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     #問題のタイトル
@@ -49,15 +55,6 @@ class Quiz(db.Model):
     cand2 = db.Column(db.String(128))
     cand3 = db.Column(db.String(128))
 
-# 中間テーブル
-class Relation(db.Model):
-    __tablename__ = 'Relations'
-    id = db.Column(db.Integer, primary_key=True)
-    #問題セットのID
-    set = db.Column(db.Integer)
-    #問題のID
-    quiz = db.Column(db.Integer)
-
 class QuizSet(db.Model):
     __tablename__ = 'QuizSets'
     #問題セットのID
@@ -66,6 +63,8 @@ class QuizSet(db.Model):
     author = db.Column(db.Integer)
     #問題セットのタイトル
     title = db.Column(db.String(128))
+    #双方の中間テーブルの設定
+    quiz = db.relationship('Quiz', secondary=quiz_quizsets, backref=db.backref('quizsets', lazy=True))
 
 ### 実装する機能の設定 #########################
 
@@ -145,8 +144,8 @@ def users_id_post_edit(id):
 
 @app.route("/quiz",methods=['GET'])
 def quiz_get():
-    quizes = Quiz.query.all()
-    return render_template('answer_quiz.html', quizes=quizes)
+    quizzes = Quiz.query.all()
+    return render_template('answer_quiz.html', quizzes=quizzes)
 
 @app.route("/make",methods=['GET'])
 def make_get():
