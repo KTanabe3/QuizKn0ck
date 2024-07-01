@@ -145,7 +145,8 @@ def users_id_post_edit(id):
 
 @app.route("/quiz",methods=['GET'])
 def quiz_get():
-    return render_template('answer_quiz.html')
+    quizes = Quiz.query.all()
+    return render_template('answer_quiz.html', quizes=quizes)
 
 @app.route("/make",methods=['GET'])
 def make_get():
