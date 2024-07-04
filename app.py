@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, Response, redirect, url_for
+from flask import Flask, render_template, request, Response, redirect, url_for, Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager, current_user, login_user, login_required, logout_user
 from models import db, User, quiz_quizsets, Quiz, QuizSet
+from app_post_login import post_login
 
 app = Flask(__name__)
 
@@ -19,10 +20,12 @@ migrate = Migrate(app, db)
 login = LoginManager(app)
 
 ### 実装する機能の設定 #########################
+app.register_blueprint(post_login)
 
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
 
 @app.route('/home',methods=['GET'])
 @login_required
@@ -37,22 +40,6 @@ def login_get():
         return redirect(url_for('home_get'))
     # loginページのテンプレートを返す
     return render_template('login.html')
-
-@app.route('/login', methods=['POST'])
-def login_post():
-    user = User.query.filter_by(mail=request.form["mail"]).one_or_none()
-    
-    # ユーザが存在しない or パスワードが間違っている時
-    if user is None or not user.check_password(request.form["password"]):
-        # メッセージの表示
-        flash('メールアドレスかパスワードが間違っています')
-        # loginページへリダイレクト
-        return redirect(url_for('login_get'))
-
-    # ログインを承認
-    login_user(user)
-    # トップページへリダイレクト
-    return redirect(url_for('home_get'))
 
 @app.route('/logout')
 def logout():
@@ -137,7 +124,6 @@ def make_quiz():
     db.session.add(quiz)
     db.session.commit()
     return redirect(url_for('home_get'))
-
 
 db.init_app(app)
 @app.before_request
