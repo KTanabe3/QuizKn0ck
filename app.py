@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 from flask_login import LoginManager, current_user, login_user, login_required, logout_user
 from models import db, User, quiz_quizsets, Quiz, QuizSet
 from login import post_login, get_login, logout
+from register import get_users, post_users, get_users_id, post_users_id
 
 app = Flask(__name__)
 
@@ -24,47 +25,24 @@ app.register_blueprint(post_login)
 app.register_blueprint(get_login)
 app.register_blueprint(logout)
 
+app.register_blueprint(get_users)
+app.register_blueprint(post_users)
+app.register_blueprint(get_users_id)
+app.register_blueprint(post_users_id)
+
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
 
 
+@app.route('/',methods=['GET'])
+def top_get():
+    return render_template('top.html')
+
 @app.route('/home',methods=['GET'])
 @login_required
 def home_get():
     return render_template('home.html')
-
-@app.route("/users",methods=['GET'])
-def users_get():
-    users = User.query.all()
-    return render_template('users_get.html', users=users)
-
-@app.route("/users",methods=['POST'])
-def users_post():
-    user = User(
-        name=request.form["user_name"],
-        mail=request.form["mail"]
-    )
-    user.set_password(request.form["password"])
-    db.session.add(user)
-    db.session.commit()
-    return redirect(url_for('users_get'))
-
-@app.route("/users/<id>",methods=['GET'])
-@login_required
-def users_id_get(id):
-    if str(current_user.id) != str(id):
-        return Response(response="他人の個別ページは開けません", status=403)
-    user = User.query.get(id)
-    return render_template('users_id_get.html', user=user)
-
-@app.route("/users/<id>/edit",methods=['POST'])
-def users_id_post_edit(id):
-    user = User.query.get(id)
-    user.name = request.form["user_name"]
-    db.session.merge(user)
-    db.session.commit()
-    return redirect(url_for('users_get'))
 
 
 @app.route("/quiz",methods=['GET'])
