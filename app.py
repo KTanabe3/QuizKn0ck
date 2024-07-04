@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request, Response, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_login import LoginManager, UserMixin, current_user, login_user, login_required, logout_user
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import LoginManager, current_user, login_user, login_required, logout_user
+from models import db, User, quiz_quizsets, Quiz, QuizSet
 
 app = Flask(__name__)
 
@@ -15,56 +15,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+mysqldb://{DB_USER}:{DB_PASS}@{D
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.secret_key = "secret"
 
-db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login = LoginManager(app)
-
-### テーブル設定 ###############################
-
-#ユーザテーブル
-class User(UserMixin, db.Model):
-    __tablename__ = 'Users'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(128))
-    mail = db.Column(db.String(128), unique=True)
-    password = db.Column(db.String(256))
-    def set_password(self, password):
-        self.password = generate_password_hash(password)
-    def check_password(self, password):
-        return check_password_hash(self.password, password)
-
-# 関係テーブル(Quiz <--> QuizSet)
-quiz_quizsets = db.Table('quiz_quizsets',
-    db.Column('quiz_id', db.Integer, db.ForeignKey('Quizzes.id'), primary_key=True),
-    db.Column('quizset_id', db.Integer, db.ForeignKey('QuizSets.id'), primary_key=True)
-)
-
-# クイズテーブル
-class Quiz(db.Model):
-    __tablename__ = 'Quizzes'
-    #問題のID
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    #問題のタイトル
-    title = db.Column(db.String(128))
-    #問題の本文
-    text = db.Column(db.String(128))
-    #問題の正答
-    ans = db.Column(db.String(128))
-    #以下ダミー候補
-    cand1 = db.Column(db.String(128))
-    cand2 = db.Column(db.String(128))
-    cand3 = db.Column(db.String(128))
-
-class QuizSet(db.Model):
-    __tablename__ = 'QuizSets'
-    #問題セットのID
-    id = db.Column(db.Integer, primary_key=True)
-    #セット作成者のuserID
-    author = db.Column(db.Integer)
-    #問題セットのタイトル
-    title = db.Column(db.String(128))
-    #双方の中間テーブルの設定
-    quiz = db.relationship('Quiz', secondary=quiz_quizsets, backref=db.backref('quizsets', lazy=True))
 
 ### 実装する機能の設定 #########################
 
@@ -185,6 +137,12 @@ def make_quiz():
     db.session.add(quiz)
     db.session.commit()
     return redirect(url_for('home_get'))
+
+
+db.init_app(app)
+@app.before_request
+def init():
+    db.create_all()
     
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)
