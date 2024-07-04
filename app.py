@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager, current_user, login_user, login_required, logout_user
 from models import db, User, quiz_quizsets, Quiz, QuizSet
-from app_post_login import post_login
+from login import post_login, get_login, logout
 
 app = Flask(__name__)
 
@@ -21,6 +21,8 @@ login = LoginManager(app)
 
 ### 実装する機能の設定 #########################
 app.register_blueprint(post_login)
+app.register_blueprint(get_login)
+app.register_blueprint(logout)
 
 @login.user_loader
 def load_user(id):
@@ -31,22 +33,6 @@ def load_user(id):
 @login_required
 def home_get():
     return render_template('home.html')
-
-@app.route('/login', methods=['GET'])
-def login_get():
-    # 現在のユーザーがログイン済みの場合
-    if current_user.is_authenticated:
-        # トップページに移動
-        return redirect(url_for('home_get'))
-    # loginページのテンプレートを返す
-    return render_template('login.html')
-
-@app.route('/logout')
-def logout():
-  # logout_user関数を呼び出し
-  logout_user()
-  # トップページにリダイレクト
-  return redirect(url_for('home_get'))
 
 @app.route("/users",methods=['GET'])
 def users_get():
@@ -126,6 +112,7 @@ def make_quiz():
     return redirect(url_for('home_get'))
 
 db.init_app(app)
+
 @app.before_request
 def init():
     db.create_all()
