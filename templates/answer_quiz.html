@@ -6,6 +6,18 @@
     <title>問題回答</title>
 </head>
 <body>
-    
+    <h1>検索結果</h1>
+    <table>
+        <tr>
+            <th >ID</th>
+            <th >名前</th>
+        </tr>
+        {% for quizset in quizsets %}
+        <tr>
+            <td><p>{{ quizset.id }}</p></td>
+            <td>{{ quizset.title }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 </body>
 </html>
