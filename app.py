@@ -50,6 +50,12 @@ def quiz_get():
     quizsets = QuizSet.query.all()
     return render_template('answer_quiz.html', quizsets=quizsets)
 
+@app.route("/quiz/<id>", methods=['GET'])
+def quiz_id_get(id):
+    quizset = QuizSet.query.get(id)
+    quizzes = quizset.quiz
+    return render_template('answer_quiz_id.html', quizset = quizset, quizzes = quizzes)
+
 @app.route("/make/quizset",methods=['GET'])
 def make_quizset_get():
     quizzes = Quiz.query.all()
@@ -77,7 +83,7 @@ def make_quizset():
     for id in ids:
         quiz = Quiz.query.get(id)
         setted_quiz.append(quiz)
-    quizset.quiz = []
+    quizset.quiz = setted_quiz
     db.session.add(quizset)
     db.session.commit()
     return redirect(url_for('home_get'))
