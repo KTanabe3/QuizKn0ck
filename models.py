@@ -48,3 +48,6 @@ class QuizSet(db.Model):
     title = db.Column(db.String(128))
     #双方の中間テーブルの設定
     quiz = db.relationship('Quiz', secondary=quiz_quizsets, backref=db.backref('quizsets', lazy=True))
+    #作成者
+    author_id = db.Column(db.Integer, db.ForeignKey('Users.id'))
+    author = db.relationship('User', backref=db.backref('users', lazy=True))
