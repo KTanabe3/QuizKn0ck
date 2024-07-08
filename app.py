@@ -77,7 +77,7 @@ def make_quizset():
     for id in ids:
         quiz = Quiz.query.get(id)
         setted_quiz.append(quiz)
-    quizset.quiz = []
+    quizset.quiz = setted_quiz
     db.session.add(quizset)
     db.session.commit()
     return redirect(url_for('home_get'))
