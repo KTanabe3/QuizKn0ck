@@ -54,7 +54,16 @@ def quiz_get():
 def quiz_id_get(id):
     quizset = QuizSet.query.get(id)
     quizzes = quizset.quiz
-    return render_template('answer_quiz_id.html', quizset = quizset, quizzes = quizzes)
+    quiz = Quiz.query.all()
+    return render_template('answer_quiz_id.html', quizset = quizset, quizzes = quizzes, quiz = quiz)
+
+@app.route("/quiz/<id>/answer", methods=['GET'])
+def answer_get(id):
+    quizset = QuizSet.query.get(id)
+    quizzes = quizset.quiz
+    quiz = Quiz.query.all()
+
+    return render_template('answer.html', quizset = quizset, quizzes = quizzes, quiz = quiz)
 
 @app.route("/make/quizset",methods=['GET'])
 def make_quizset_get():

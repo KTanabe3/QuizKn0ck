@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>問題回答</title>
+    <title>問題一覧</title>
 </head>
 <body>
-    <h1>検索結果</h1>
     <p>{{ quizset.id }}</p>
+    <p>{{ quizset.title }}</p>
     <table>
         <tr>
             <th >ID</th>
@@ -19,7 +19,7 @@
         </tr>
         {% endfor %}
     </table>
-
+    <a href="/quiz/{{ quizset.id }}/answer">回答スタート</a>
 
 </body>
 </html>
