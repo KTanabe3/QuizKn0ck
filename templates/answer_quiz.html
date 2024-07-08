@@ -12,10 +12,10 @@
             <th >ID</th>
             <th >名前</th>
         </tr>
-        {% for quiz in quizzes %}
+        {% for quizset in quizsets %}
         <tr>
-            <td><p>{{ quiz.id }}</p></td>
-            <td>{{ quiz.title }}</td>
+            <td><p>{{ quizset.id }}</p></td>
+            <td>{{ quizset.title }}</td>
         </tr>
         {% endfor %}
     </table>

@@ -47,12 +47,13 @@ def home_get():
 
 @app.route("/quiz",methods=['GET'])
 def quiz_get():
-    quizzes = Quiz.query.all()
-    return render_template('answer_quiz.html', quizzes=quizzes)
+    quizsets = QuizSet.query.all()
+    return render_template('answer_quiz.html', quizsets=quizsets)
 
 @app.route("/make/quizset",methods=['GET'])
 def make_quizset_get():
-    return render_template('make_quiz_set.html')
+    quizzes = Quiz.query.all()
+    return render_template('make_quiz_set.html', quizzes=quizzes)
 
 @app.route("/make/quiz",methods=['GET'])
 def make_quiz_get():
@@ -68,9 +69,15 @@ def owner_view_get():
 
 @app.route("/make/quizset", methods=['POST'])
 def make_quizset():
-    quizset = Quizset(
+    quizset = QuizSet(
         title=request.form["title"]
     )
+    ids = request.form.getlist("id")
+    setted_quiz = []
+    for id in ids:
+        quiz = Quiz.query.get(id)
+        setted_quiz.append(quiz)
+    quizset.quiz = []
     db.session.add(quizset)
     db.session.commit()
     return redirect(url_for('home_get'))
