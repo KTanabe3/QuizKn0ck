@@ -70,6 +70,7 @@ def answer_get(id):
         choices = [quiz.ans, quiz.cand1, quiz.cand2, quiz.cand3]
         random.shuffle(choices)
         quiz_dict = {
+            'id': quiz.id,
             'title': quiz.title,
             'text': quiz.text,
             'choices': choices
@@ -79,14 +80,12 @@ def answer_get(id):
     return render_template('answer.html', quizset=quizset, quizzes=quizzes_with_choices)
 
 @app.route("/quiz/<id>/answer", methods=['POST'])
-def answer_post(id):
+def answer_post(id):    
     quizset = QuizSet.query.get(id)
     quizzes = quizset.quiz
-    quiz = Quiz.query.all()
-    
     count = 0
     for quiz in quizzes:
-        ans = request.form["quiz.title"]
+        ans = request.form.get(f"quiz_{quiz.id}")
         if ans == quiz.ans:
             count += 1
 
