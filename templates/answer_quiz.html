@@ -14,8 +14,9 @@
         </tr>
         {% for quizset in quizsets %}
         <tr>
-            <td><p>{{ quizset.id }}</p></td>
+            <td><a href="/quiz/{{ quizset.id }}"><p>{{ quizset.id }}</p></a></td>
             <td>{{ quizset.title }}</td>
+            <td>{{ quizset.quiz }}</td>
         </tr>
         {% endfor %}
     </table>
