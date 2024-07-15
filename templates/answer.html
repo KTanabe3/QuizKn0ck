@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>問題回答</title>
+</head>
+<body>
+    <form action="/quiz/{{ quizset.id }}/answer" method="POST">
+    <h1>回答してください</h1>
+
+    <table>
+        <tr>
+            <th >タイトル</th>
+            <th >問題文</th>
+            <th >選択肢1</th>
+            <th >選択肢2</th>
+            <th >選択肢3</th>
+            <th >選択肢4</th>
+        </tr>
+        {% for quiz in quizzes %}
+        <tr>
+            <td>{{ quiz.title }}</td>
+            <td>{{ quiz.text }}</td>
+            <td><input type="radio" name="quiz_{{quiz.id}}" value="a" checked>{{ quiz.choices[0] }}</td>
+            <td><input type="radio" name="quiz_{{quiz.id}}" value="b">{{ quiz.choices[1] }}</td>
+            <td><input type="radio" name="quiz_{{quiz.id}}" value="c">{{ quiz.choices[2] }}</td>
+            <td><input type="radio" name="quiz_{{quiz.id}}" value="d">{{ quiz.choices[3] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <div>
+        <input type="submit" value="送信">
+        <input type="reset" value="取消">
+    </div>
+    </form>
+
+
+</body>
+</html>
