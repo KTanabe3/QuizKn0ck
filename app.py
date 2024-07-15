@@ -43,7 +43,8 @@ def top_get():
 @app.route('/home',methods=['GET'])
 @login_required
 def home_get():
-    return render_template('home.html')
+    quizsets = QuizSet.query.filter_by(author_id=current_user.id)
+    return render_template('home.html', quizsets=quizsets)
 
 
 @app.route("/quiz",methods=['GET'])
@@ -111,7 +112,8 @@ def owner_view_get():
 @app.route("/make/quizset", methods=['POST'])
 def make_quizset():
     quizset = QuizSet(
-        title=request.form["title"]
+        title=request.form["title"],
+        author_id=current_user.id
     )
     ids = request.form.getlist("id")
     setted_quiz = []

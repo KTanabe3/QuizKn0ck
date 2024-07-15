@@ -10,6 +10,8 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128))
     mail = db.Column(db.String(128), unique=True)
+    # True: 教師, False: 学生
+    role = db.Column(db.Boolean)
     password = db.Column(db.String(256))
     def set_password(self, password):
         self.password = generate_password_hash(password)
@@ -48,3 +50,12 @@ class QuizSet(db.Model):
     title = db.Column(db.String(128))
     #双方の中間テーブルの設定
     quiz = db.relationship('Quiz', secondary=quiz_quizsets, backref=db.backref('quizsets', lazy=True))
+    #作成者
+    author_id = db.Column(db.Integer, db.ForeignKey('Users.id'))
+    author = db.relationship('User', backref=db.backref('users', lazy=True))
+    result = db.relationship('Result', backref='quizsets', uselist=False)
+
+class Result(db.Model):
+    __tablename__ = 'Result'
+    id = db.Column(db.Integer, primary_key=True)
+    quizset = db.Column(db.Integer, db.ForeignKey('QuizSets.id'))

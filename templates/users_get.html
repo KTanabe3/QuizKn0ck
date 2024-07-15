@@ -3,13 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>ユーザ一覧</title>
+    <style>
+        .string {
+            padding-top: 5px;
+            padding-bottom: 5px;
+            border-radius: 6px;
+            border-style: none;
+            background: #eeeeee;
+        }
+    </style>
 </head>
 <body>
     <h1>追加フォーム</h1>
     <form action="/users" method="POST">
-        <div>名前:<input name="user_name"></input></div>
-        <div>メールアドレス:<input name="mail"></input></div>
-        <div>パスワード:<input type="password" name="password"></input></div>
+        <div>名前:<input name="user_name" class="string" required></input></div>
+        <div>メールアドレス:<input name="mail" class="string" required></input></div>
+        <div>パスワード:<input type="password" name="password" class="string" required></input></div>
+        <label></label><input type="radio" name="role" value="" checked>学生</label>
+        <label></label><input type="radio" name="role" value="true">教師</label>
         <div>
             <input type="submit" value="送信">
             <input type="reset" value="取消">
