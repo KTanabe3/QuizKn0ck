@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, Response, redirect, url_for, Blueprint
+import random
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager, current_user, login_user, login_required, logout_user
@@ -63,7 +64,34 @@ def answer_get(id):
     quizzes = quizset.quiz
     quiz = Quiz.query.all()
 
-    return render_template('answer.html', quizset = quizset, quizzes = quizzes, quiz = quiz)
+    # シャッフルされた選択肢を含む辞書のリストを作成
+    quizzes_with_choices = []
+    for quiz in quizzes:
+        choices = [quiz.ans, quiz.cand1, quiz.cand2, quiz.cand3]
+        random.shuffle(choices)
+        quiz_dict = {
+            'title': quiz.title,
+            'text': quiz.text,
+            'choices': choices
+        }
+        quizzes_with_choices.append(quiz_dict)
+
+    return render_template('answer.html', quizset=quizset, quizzes=quizzes_with_choices)
+
+@app.route("/quiz/<id>/answer", methods=['POST'])
+def answer_post(id):
+    quizset = QuizSet.query.get(id)
+    quizzes = quizset.quiz
+    quiz = Quiz.query.all()
+    
+    count = 0
+    for quiz in quizzes:
+        ans = request.form["quiz.title"]
+        if ans == quiz.ans:
+            count += 1
+
+    return redirect(url_for('home_get'))
+
 
 @app.route("/make/quizset",methods=['GET'])
 def make_quizset_get():
