@@ -6,6 +6,9 @@ from flask_login import LoginManager, current_user, login_user, login_required, 
 from models import db, User, quiz_quizsets, Quiz, QuizSet
 from login import post_login, get_login, logout
 from register import get_users, post_users, get_users_id, post_users_id
+from quiz import make_quiz_get, make_quiz_post
+from quizset import make_quizset_get, make_quizset_post
+from answer import quizset_get, quizset_id_get, answer_get, answer_post
 
 app = Flask(__name__)
 
@@ -31,10 +34,21 @@ app.register_blueprint(post_users)
 app.register_blueprint(get_users_id)
 app.register_blueprint(post_users_id)
 
+app.register_blueprint(quizset_get)
+app.register_blueprint(quizset_id_get)
+app.register_blueprint(answer_get)
+app.register_blueprint(answer_post)
+
+app.register_blueprint(make_quiz_get)
+app.register_blueprint(make_quiz_post)
+
+app.register_blueprint(make_quizset_get)
+app.register_blueprint(make_quizset_post)
+
+
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
-
 
 @app.route('/',methods=['GET'])
 def top_get():
@@ -46,61 +60,6 @@ def home_get():
     quizsets = QuizSet.query.filter_by(author_id=current_user.id)
     return render_template('home.html', quizsets=quizsets)
 
-
-@app.route("/quiz",methods=['GET'])
-def quiz_get():
-    quizsets = QuizSet.query.all()
-    return render_template('answer_quiz.html', quizsets=quizsets)
-
-@app.route("/quiz/<id>", methods=['GET'])
-def quiz_id_get(id):
-    quizset = QuizSet.query.get(id)
-    quizzes = quizset.quiz
-    quiz = Quiz.query.all()
-    return render_template('answer_quiz_id.html', quizset = quizset, quizzes = quizzes, quiz = quiz)
-
-@app.route("/quiz/<id>/answer", methods=['GET'])
-def answer_get(id):
-    quizset = QuizSet.query.get(id)
-    quizzes = quizset.quiz
-    quiz = Quiz.query.all()
-
-    # シャッフルされた選択肢を含む辞書のリストを作成
-    quizzes_with_choices = []
-    for quiz in quizzes:
-        choices = [quiz.ans, quiz.cand1, quiz.cand2, quiz.cand3]
-        random.shuffle(choices)
-        quiz_dict = {
-            'id': quiz.id,
-            'title': quiz.title,
-            'text': quiz.text,
-            'choices': choices
-        }
-        quizzes_with_choices.append(quiz_dict)
-
-    return render_template('answer.html', quizset=quizset, quizzes=quizzes_with_choices)
-
-@app.route("/quiz/<id>/answer", methods=['POST'])
-def answer_post(id):    
-    quizset = QuizSet.query.get(id)
-    quizzes = quizset.quiz
-    count = 0
-    for quiz in quizzes:
-        ans = request.form.get(f"quiz_{quiz.id}")
-        if ans == quiz.ans:
-            count += 1
-
-    return redirect(url_for('home_get'))
-
-@app.route("/make/quizset",methods=['GET'])
-def make_quizset_get():
-    quizzes = Quiz.query.all()
-    return render_template('make_quiz_set.html', quizzes=quizzes)
-
-@app.route("/make/quiz",methods=['GET'])
-def make_quiz_get():
-    return render_template('make_quiz.html')
-
 @app.route("/view",methods=['GET'])
 def view_get():
     return render_template('view_answer.html')
@@ -108,38 +67,6 @@ def view_get():
 @app.route("/owner_view",methods=['GET'])
 def owner_view_get():
     return render_template('view_other_answer.html')
-
-@app.route("/make/quizset", methods=['POST'])
-def make_quizset():
-    quizset = QuizSet(
-        title=request.form["title"],
-        author_id=current_user.id
-    )
-    ids = request.form.getlist("id")
-    setted_quiz = []
-    for id in ids:
-        quiz = Quiz.query.get(id)
-        setted_quiz.append(quiz)
-
-    quizset.quiz = setted_quiz
-
-    db.session.add(quizset)
-    db.session.commit()
-    return redirect(url_for('home_get'))
-
-@app.route("/make/quiz", methods=['POST'])
-def make_quiz():
-    quiz = Quiz(
-        title=request.form["title"],
-        text=request.form["text"],
-        ans=request.form["ans"],
-        cand1=request.form["cand1"],
-        cand2=request.form["cand2"],
-        cand3=request.form["cand3"]
-    )
-    db.session.add(quiz)
-    db.session.commit()
-    return redirect(url_for('home_get'))
 
 db.init_app(app)
 
