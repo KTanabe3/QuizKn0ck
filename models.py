@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
 db = SQLAlchemy()
 
 #ユーザテーブル
@@ -56,6 +57,9 @@ class QuizSet(db.Model):
     result = db.relationship('Result', backref='quizsets', uselist=False)
 
 class Result(db.Model):
-    __tablename__ = 'Result'
+    __tablename__ = 'Results'
     id = db.Column(db.Integer, primary_key=True)
     quizset = db.Column(db.Integer, db.ForeignKey('QuizSets.id'))
+    score = db.Column(db.Integer)
+    total = db.Column(db.Integer)
+    user_answers = db.Column(db.Text) 

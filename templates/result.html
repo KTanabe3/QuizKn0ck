@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>問題一覧</title>
+</head>
+<body>
+    <p>{{ quizset.id }}</p>
+    <p>{{ quizset.title }}</p>
+    <p>正答数: {{ result.score }} / {{ result.total }}</p>
+    <p>{{quizset}}</p>
+    <p>{{quizzes}}</p>
+    <p>{{result}}</p>
+    <p>{{ user_answers }}</p>
+    <table>
+        <tr>
+            <th >問題</th>
+            <th >正答</th>
+            <th>あなたの回答</th>
+        </tr>
+        {% for quiz in quizzes %}
+        <tr>
+            <td> {{ quiz.title }} </td>
+            <td> {{ quiz.ans }} </td>
+            {% for result in results %}
+            <tr>
+                <td> {{ result.user_answers}} </td>
+            </tr>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="/home">ホームに戻る</a>
+
+</body>
+</html>

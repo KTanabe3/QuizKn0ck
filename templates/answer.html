@@ -22,10 +22,10 @@
         <tr>
             <td>{{ quiz.title }}</td>
             <td>{{ quiz.text }}</td>
-            <td><input type="radio" name="quiz_{{quiz.id}}" value="a" checked>{{ quiz.choices[0] }}</td>
-            <td><input type="radio" name="quiz_{{quiz.id}}" value="b">{{ quiz.choices[1] }}</td>
-            <td><input type="radio" name="quiz_{{quiz.id}}" value="c">{{ quiz.choices[2] }}</td>
-            <td><input type="radio" name="quiz_{{quiz.id}}" value="d">{{ quiz.choices[3] }}</td>
+            <td><input type="radio" name="quiz_{{quiz.id}}" value="{{ quiz.choices[0] }}" checked>{{ quiz.choices[0] }}</td>
+            <td><input type="radio" name="quiz_{{quiz.id}}" value="{{ quiz.choices[1] }}">{{ quiz.choices[1] }}</td>
+            <td><input type="radio" name="quiz_{{quiz.id}}" value="{{ quiz.choices[2] }}">{{ quiz.choices[2] }}</td>
+            <td><input type="radio" name="quiz_{{quiz.id}}" value="{{ quiz.choices[3] }}">{{ quiz.choices[3] }}</td>
         </tr>
         {% endfor %}
     </table>

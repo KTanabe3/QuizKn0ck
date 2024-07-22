@@ -3,13 +3,12 @@ import random
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager, current_user, login_user, login_required, logout_user
-from models import db, User, quiz_quizsets, Quiz, QuizSet
+from models import db, User, quiz_quizsets, Quiz, QuizSet, Result
 from login import post_login, get_login, logout
 from register import get_users, post_users, get_users_id, post_users_id
 from quiz import make_quiz_get, make_quiz_post
 from quizset import make_quizset_get, make_quizset_post
-from answer import quizset_get, quizset_id_get, answer_get, answer_post
-
+from answer import quizset_get, quizset_id_get, answer_get, answer_post, result_get
 app = Flask(__name__)
 
 DB_USER = "docker"
@@ -38,6 +37,8 @@ app.register_blueprint(quizset_get)
 app.register_blueprint(quizset_id_get)
 app.register_blueprint(answer_get)
 app.register_blueprint(answer_post)
+app.register_blueprint(result_get)
+
 
 app.register_blueprint(make_quiz_get)
 app.register_blueprint(make_quiz_post)
