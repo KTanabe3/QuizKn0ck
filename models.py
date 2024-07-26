@@ -45,21 +45,29 @@ class QuizSet(db.Model):
     __tablename__ = 'QuizSets'
     #問題セットのID
     id = db.Column(db.Integer, primary_key=True)
-    #セット作成者のuserID
-    author = db.Column(db.Integer)
     #問題セットのタイトル
     title = db.Column(db.String(128))
     #双方の中間テーブルの設定
     quiz = db.relationship('Quiz', secondary=quiz_quizsets, backref=db.backref('quizsets', lazy=True))
     #作成者
     author_id = db.Column(db.Integer, db.ForeignKey('Users.id'))
-    author = db.relationship('User', backref=db.backref('users', lazy=True))
-    result = db.relationship('Result', backref='quizsets', uselist=False)
+    author = db.relationship('User', backref=db.backref('quizsets', lazy=True))
 
 class Result(db.Model):
     __tablename__ = 'Results'
     id = db.Column(db.Integer, primary_key=True)
-    quizset = db.Column(db.Integer, db.ForeignKey('QuizSets.id'))
     score = db.Column(db.Integer)
     total = db.Column(db.Integer)
-    user_answers = db.Column(db.Text) 
+    quizset_id = db.Column(db.Integer, db.ForeignKey('QuizSets.id'))
+    quizset = db.relationship('QuizSet', backref=db.backref('results', lazy=True))
+    answerer_id = db.Column(db.Integer, db.ForeignKey('Users.id'))
+    answerer = db.relationship('User', backref=db.backref('results', lazy=True))
+
+class Answer(db.Model):
+    __tablename__ = 'Answers'
+    id = db.Column(db.Integer, primary_key=True)
+    ans = db.Column(db.String(128))
+    quiz_id = db.Column(db.Integer, db.ForeignKey('Quizzes.id'))
+    quiz = db.relationship('Quiz', backref=db.backref('answers', lazy=True))
+    result_id = db.Column(db.Integer, db.ForeignKey('Results.id'))
+    result = db.relationship('Result', backref=db.backref('answers', lazy=True))

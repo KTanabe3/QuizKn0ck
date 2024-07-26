@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, Response
+from flask_login import current_user
 import random
-from models import db, Quiz, QuizSet, User, Result
+from models import db, Quiz, QuizSet, User, Result, Answer
 
 quizset_get = Blueprint('quiz_get', __name__)
 quizset_id_get = Blueprint('quiz_id_get', __name__)
@@ -46,45 +47,47 @@ def get_answer(id):
 
 # クイズの解答を送信し、正答数を算出
 @answer_post.route("/quiz/<id>/answer", methods=['POST'])
-def post_answer(id):    
+def post_answer(id):
     quizset = QuizSet.query.get(id)
     quizzes = quizset.quiz
     count = 0
     total = len(quizzes)
-    user_answers = []
 
     for quiz in quizzes:
         ans = request.form.get(f"quiz_{quiz.id}")
-        print(f"Quiz ID: {quiz.id}, Answer: {ans}, Correct Answer: {quiz.ans}")  # デバッグ用
         if ans:  # ans が None でないことを確認
-            user_answers.append(f"{quiz.id}:{ans}")
             if ans == quiz.ans:
-                count += 1
+                count+=1
 
-    user_answers_str = ";".join(user_answers)
-    print("User Answers String:", user_answers_str)  # デバッグ用
-
-    result = Result(quizset=quizset.id, score=count, total=total, user_answers=user_answers_str)
+    result = Result(
+        answerer_id=current_user.id,
+        score=count,
+        total=total,
+        quizset_id=quizset.id
+    )
     db.session.add(result)
     db.session.commit()
+    
+    for quiz in quizzes:
+        ans = request.form.get(f"quiz_{quiz.id}")
+        if ans:  # ans が None でないことを確認
+            answer = Answer(
+                ans=ans,
+                quiz_id=quiz.id,
+                result_id=result.id
+            )
+            db.session.add(answer)
+            db.session.commit()
+
+    id = result.id
 
     return redirect(url_for('result_get.get_result', id=id))
 
+# 結果ページへ遷移
 @result_get.route("/quiz/<id>/result", methods={'GET'})
 def get_result(id):
-    quizset = QuizSet.query.get(id)
-    quizzes = quizset.quiz
-    quiz = Quiz.query.all()
-    result = Result.query.filter_by(quizset=id).first()
-
-    if result is None or result.user_answers is None:
-        user_answers = {}
-    else:
-        user_answers = {}
-        for entry in result.user_answers.split(";"):
-            quiz_id, answer = entry.split(":")
-            user_answers[int(quiz_id)] = answer
-
-    print("User Answers:", user_answers)  # デバッグ用
-
-    return render_template('result.html', quizset = quizset, quizzes = quizzes, quiz = quiz,  result = result, user_answers = user_answers)
+    
+    result = Result.query.get(id)
+    quizset = result.quizset
+    answers = Answer.query.filter_by(result_id=result.id)
+    return render_template('result.html', quizset=quizset, answers=answers, result=result)

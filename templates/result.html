@@ -6,30 +6,23 @@
     <title>問題一覧</title>
 </head>
 <body>
-    <p>{{ quizset.id }}</p>
-    <p>{{ quizset.title }}</p>
-    <p>正答数: {{ result.score }} / {{ result.total }}</p>
-    <p>{{quizset}}</p>
-    <p>{{quizzes}}</p>
-    <p>{{result}}</p>
-    <p>{{ user_answers }}</p>
+    <h1>{{ quizset.title }}</h1>
+    <p>正答数：{{ result.score }}/{{ result.total }}</p>
     <table>
         <tr>
             <th >問題</th>
             <th >正答</th>
             <th>あなたの回答</th>
         </tr>
-        {% for quiz in quizzes %}
+        {% for answer in answers %}
         <tr>
-            <td> {{ quiz.title }} </td>
-            <td> {{ quiz.ans }} </td>
-            {% for result in results %}
-            <tr>
-                <td> {{ result.user_answers}} </td>
-            </tr>
-            {% endfor %}
+            <th>{{ answer.quiz.title }}</th>
+            <th>{{ answer.ans }}</th>
+            <th>{{ answer.quiz.ans }}</th>
+
         </tr>
         {% endfor %}
+
     </table>
     <a href="/home">ホームに戻る</a>
 
