@@ -63,11 +63,22 @@ def home_get():
 
 @app.route("/view",methods=['GET'])
 def view_get():
-    return render_template('view_answer.html')
+    results = Result.query.filter_by(answerer_id=current_user.id)
+    return render_template('view_answer.html', results=results)
 
 @app.route("/owner_view",methods=['GET'])
 def owner_view_get():
-    return render_template('view_other_answer.html')
+    quizsets = QuizSet.query.filter_by(author_id=current_user.id)
+    return render_template('view_other_answer.html', quizsets=quizsets)
+
+@app.route("/statistic/owner/<id>",methods=['GET'])
+def statistic_owner_get(id):
+    quizset = QuizSet.query.get(id)
+    results = Result.query.filter_by(quizset_id=quizset.id)
+    setted_results = []
+    for result in results:
+        setted_results.append([result.answerer,result.score,result.total])
+    return render_template('statistic_owner_id.html', quizset=quizset, setted_results=setted_results)
 
 db.init_app(app)
 

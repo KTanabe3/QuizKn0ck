@@ -4,21 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>問題回答</title>
+    <style>
+        h1 {
+            padding: 0.5em;
+        }
+        
+        body {
+            background-color: #F8EDE3;
+        }
+        a {
+            text-decoration: none;
+            color: black;
+        }
+        ul, ol {
+            background: #DFD3C3;
+            box-shadow: 0px 0px 0px 10px #DFD3C3;/*線の外側*/
+            border: dashed 2px #8D493A;/*破線*/
+            border-radius: 9px;
+            margin-left: 20px;/*はみ出ないように調整*/
+            margin-right: 10px;/*はみ出ないように調整*/
+            padding: 0.5em 0.5em 0.5em 3em;
+            width: 40%;
+        }
+        
+        ul li, ol li {
+            line-height: 1.5;
+            padding: 0.5em 1em;
+        }
+    </style>
 </head>
 <body>
-    <h1>検索結果</h1>
-    <table>
-        <tr>
-            <th >ID</th>
-            <th >名前</th>
-        </tr>
+    <h1>解答可能なクイズセット一覧</h1>
+
+    <ul>
         {% for quizset in quizsets %}
-        <tr>
-            <td><a href="/quiz/{{ quizset.id }}"><p>{{ quizset.id }}</p></a></td>
-            <td>{{ quizset.title }}</td>
-            <td>{{ quizset.quiz }}</td>
-        </tr>
+        <li><a href="/quiz/{{ quizset.id }}"><h4>{{ quizset.title }}</h4></a></li>
         {% endfor %}
-    </table>
+    </ul>
 </body>
 </html>

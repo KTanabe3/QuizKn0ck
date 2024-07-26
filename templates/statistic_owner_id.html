@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>問題一覧</title>
+    <title>統計</title>
     <style>
         body {
             background-color: #F8EDE3;
@@ -11,19 +11,19 @@
     </style>
 </head>
 <body>
-    <p>{{ quizset.id }}</p>
-    <p>{{ quizset.title }}</p>
+    <h1>{{ quizset.title }} の解答状況</h1>
+
     <table>
         <tr>
-            <th >問題一覧</th>
+            <th>解答者</th>
+            <th>得点</th>
         </tr>
-        {% for quiz in quizzes %}
+        {% for result in setted_results %}
         <tr>
-            <td> {{ quiz.title }} </td>
+            <td>{{ result[0].name }}</td>
+            <td>{{ result[1] }} / {{ result[2] }}</td>
         </tr>
         {% endfor %}
     </table>
-    <a href="/quiz/{{ quizset.id }}/answer">回答スタート</a>
-
 </body>
 </html>

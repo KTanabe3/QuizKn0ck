@@ -4,29 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ホーム</title>
+    <style>
+        a {
+            text-decoration: none;
+        }
+
+        body {
+            background-color: #F8EDE3;
+        }
+
+        .main-content {
+            display:flex;
+            flex-flow: column;
+            height:auto;
+            margin:0 0 1em;
+        }
+        .content {
+            position:relative;
+            padding:1.6em;
+            text-align: center;
+            background-color:#8D493A;
+            margin:1.3em auto;
+            width:40%;
+            border-radius: 1em;
+            transition:all .2s;
+        }
+        .content a {
+            position:absolute;
+            letter-spacing: 0.5em;
+            color: #F8EDE3;
+            padding: 1em;
+            top:0;
+            left:0;
+            width:100%;
+        }
+    </style>
 </head>
 <body>
     <h1>ようこそ、{{ current_user.name }} {% if current_user.role %}先生{% else %}君{% endif %}</h1>
-    <a href="/quiz">問題回答</a>
-    <a href="/make/quiz">問題作成</a>
-    {% if current_user.role %}
-    <a href="/make/quizset">問題セット作成</a>
-    {% endif %}
-    <a href="/view">回答結果</a>
-    <a href="/owner_view">回答結果(作成者)</a>
-    <a href="/users">ユーザ選択</a>
-    <table>
-        <tr>
-            <th >ID</th>
-            <th >名前</th>
-        </tr>
-        {% for quizset in quizsets %}
-        <tr>
-            <td><p>{{ quizset.id }}</p></td>
-            <td>{{ quizset.title }}</td>
-            <td>{{ quizset.quiz }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+    <div class="main-content">
+        <div class="content"><a href="/quiz">問題回答</a></div>
+        <div class="content"><a href="/make/quiz">問題作成</a></div>
+        {% if current_user.role %}
+        <div class="content"><a href="/make/quizset">問題セット作成</a></div>
+        {% endif %}
+        <div class="content"><a href="/view">あなたの回答</a></div>
+        {% if current_user.role %}
+        <div class="content"><a href="/owner_view">回答結果(作成者向け)</a></div>        
+        {% endif %}      
+    </div>
+
 </body>
 </html>
