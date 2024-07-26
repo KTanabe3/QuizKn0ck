@@ -1,8 +1,8 @@
-"""add role
+"""hobokannsei
 
-Revision ID: 99ecc8a573af
-Revises: c170749209db
-Create Date: 2024-07-18 01:45:07.672947
+Revision ID: 4399ea64a873
+Revises: 99ecc8a573af
+Create Date: 2024-07-18 02:31:22.543240
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import mysql
 
 # revision identifiers, used by Alembic.
-revision = '99ecc8a573af'
-down_revision = 'c170749209db'
+revision = '4399ea64a873'
+down_revision = '99ecc8a573af'
 branch_labels = None
 depends_on = None
 

@@ -25,7 +25,7 @@ def login_post():
         # メッセージの表示
         flash('メールアドレスかパスワードが間違っています')
         # loginページへリダイレクト
-        return redirect(url_for('login_get'))
+        return redirect(url_for('get_login.login_get'))
 
     # ログインを承認
     login_user(user)
