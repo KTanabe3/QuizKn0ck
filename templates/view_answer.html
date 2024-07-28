@@ -5,12 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>回答結果</title>
     <style>
+        header {
+            position: relative;
+            width: 100%;
+            line-height: 60px;
+            background: #646464;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        /* ロゴ */
+        header .logo {
+            padding: 0 20px;
+            margin: 5px;
+            font-size: 2rem;
+            letter-spacing: .2em;
+            text-decoration: none;
+        }
+        header .logo a {
+            text-decoration: none;
+            color: #FDF2E7;
+        }
+        /* ボタン */
+        header .button {
+            position: absolute;
+            top: 35%;
+            right: 1.5rem;
+            transform: translateY(-50%);
+        }
+        header .button:hover {
+            background:#AD695A;
+            border-radius: 10px;
+        }
+        /* ボタンのデザイン */
+        header .button a {
+            display: block;
+            width: 120px;
+            height: 40px;
+            line-height: 40px;
+            background: #FDF2E7;
+            font-size: 14px;
+            color: #3c3c3c;
+            text-align: center;
+            letter-spacing: .2em;
+            text-indent: .2em;
+            border-radius: 10px;
+        }
         h1 {
             padding: 0.5em;
         }
         
         body {
             background-color: #F8EDE3;
+            margin:0;
+            padding:0;
         }
         a {
             text-decoration: none;
@@ -38,6 +85,11 @@
     </style>
 </head>
 <body>
+    <header>
+        <p class="logo"><a href="/home">QuizKn0ck</a></p>
+        <p class="button"><a href="/logout">ログアウト</a></p>
+    </header>
+
     <h1>あなたの解答状況</h1>
 
     <table>

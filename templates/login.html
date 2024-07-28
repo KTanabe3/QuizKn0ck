@@ -14,8 +14,9 @@
         }
         .flashes {
             padding: 5px;
-            width: 90%;
+            width: 62vh;
             margin: 0 auto;
+            margin-top: 20vh;
             background: #7a7a2d;
             color: #ffff00;
             border: dashed 2px #ffff00;
@@ -23,10 +24,11 @@
             text-align: center;
         }
         .form {
-            width: 25%;
-            height: 40vh;
-            background: #F8EDE3;
+            width: 50vh;
+            height: 50vh;
+            padding: 0;
             margin: 0 auto;
+            background: #F8EDE3;
             border-radius: 25px;
             position: relative;
             top: 40%;
@@ -54,6 +56,25 @@
         }
         .inputs button:hover {
             background: #a35444;
+        }
+        .jump-register {
+            margin: 0 auto;
+            width: 74%;
+            padding: 0;
+            border: 0;
+            display: flex;
+            justify-content: center;
+            position: absolute;
+            top: 80%;
+            transform: translate(0, -50%);
+            height: 10vh;
+            z-index: -1;
+        }
+        .jump-register button{
+            width: 25vh;
+            height: 4vh;
+            display:flex;
+            justify-content: center;
         }
         h1 {
             background: #D0B8A8;
@@ -96,7 +117,19 @@
 <body>
     <div class="form">
         <h1>ログイン</h1>
-            {% with messages = get_flashed_messages() %}
+        <div class="inputs">
+            <form action="/login" method="POST">
+                <div><input name="mail" class="string" required placeholder="E-Mail"></input></div>
+                <div><input type="password" name="password" class="string" required placeholder="Password"></input></div>
+                <div><button type="submit"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -1000 960 860" width="24px" fill="#D0B8A8"><path d="M480-120v-80h280v-560H480v-80h280q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H480Zm-80-160-55-58 102-102H120v-80h327L345-622l55-58 200 200-200 200Z"/></svg>  Login</button></div>
+            </form>
+        </div>
+        <div class="jump-register">
+            <button class="new-user" onclick="location.href='/users'"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 860" width="20px" fill="#72d5f3"><path d="M444-288h72v-156h156v-72H516v-156h-72v156H288v72h156v156ZM216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h528q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Zm0-72h528v-528H216v528Zm0-528v528-528Z"/></svg><p>新規ユーザ作成</p></button>
+        </div>
+        
+    </div>
+                {% with messages = get_flashed_messages() %}
             {% if messages %}
                 <ul class=flashes>
                 {% for message in messages %}
@@ -105,15 +138,5 @@
                 </ul>
             {% endif %}
             {% endwith %}
-        <div class="inputs">
-            <form action="/login" method="POST">
-                <div><input name="mail" class="string" required placeholder="E-Mail"></input></div>
-                <div><input type="password" name="password" class="string" required placeholder="Password"></input></div>
-                <div><button type="submit"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -1000 960 860" width="24px" fill="#D0B8A8"><path d="M480-120v-80h280v-560H480v-80h280q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H480Zm-80-160-55-58 102-102H120v-80h327L345-622l55-58 200 200-200 200Z"/></svg>  Login</button></div>
-            </form>
-        </div>
-        <button class="new-user" onclick="location.href='/users'"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 860" width="20px" fill="#72d5f3"><path d="M444-288h72v-156h156v-72H516v-156h-72v156H288v72h156v156ZM216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h528q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Zm0-72h528v-528H216v528Zm0-528v528-528Z"/></svg><p>新規ユーザ作成</p></button>
-    </div>
-    <a href="/home">ホーム</a>
 </body>
 </html>

@@ -8,9 +8,53 @@
         a {
             text-decoration: none;
         }
-
+        header {
+            position: relative;
+            width: 100%;
+            line-height: 60px;
+            background: #646464;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        /* ロゴ */
+        header .logo {
+            padding: 0 20px;
+            margin: 5px;
+            font-size: 2rem;
+            letter-spacing: .2em;
+            text-decoration: none;
+        }
+        header .logo a {
+            text-decoration: none;
+            color: #FDF2E7;
+        }
+        /* ボタン */
+        header .button {
+            position: absolute;
+            top: 35%;
+            right: 1.5rem;
+            transform: translateY(-50%);
+        }
+        /* ボタンのデザイン */
+        header .button a {
+            display: block;
+            width: 120px;
+            height: 40px;
+            line-height: 40px;
+            background: #FDF2E7;
+            font-size: 14px;
+            color: #3c3c3c;
+            text-align: center;
+            letter-spacing: .2em;
+            text-indent: .2em;
+            border-radius: 10px;
+        }
+        h1 {
+            padding-left: 10px;
+        }
         body {
             background-color: #F8EDE3;
+            margin: 0;
         }
 
         .main-content {
@@ -41,6 +85,11 @@
     </style>
 </head>
 <body>
+    <header>
+        <p class="logo"><a href="/home">QuizKn0ck</a></p>
+        <p class="button"><a href="/logout">ログアウト</a></p>
+    </header>
+    
     <h1>ようこそ、{{ current_user.name }} {% if current_user.role %}先生{% else %}君{% endif %}</h1>
     <div class="main-content">
         <div class="content"><a href="/quiz">問題回答</a></div>
