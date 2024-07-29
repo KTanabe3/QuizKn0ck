@@ -92,14 +92,14 @@
     
     <h1>ようこそ、{{ current_user.name }} {% if current_user.role %}先生{% else %}君{% endif %}</h1>
     <div class="main-content">
-        <div class="content"><a href="/quiz">問題回答</a></div>
+        <div class="content"><a href="/quiz">問題解答</a></div>
         <div class="content"><a href="/make/quiz">問題作成</a></div>
         {% if current_user.role %}
         <div class="content"><a href="/make/quizset">問題セット作成</a></div>
         {% endif %}
-        <div class="content"><a href="/view">あなたの回答</a></div>
+        <div class="content"><a href="/view">あなたの解答</a></div>
         {% if current_user.role %}
-        <div class="content"><a href="/owner_view">回答結果(作成者向け)</a></div>        
+        <div class="content"><a href="/owner_view">解答結果(作成者向け)</a></div>        
         {% endif %}      
     </div>
 
