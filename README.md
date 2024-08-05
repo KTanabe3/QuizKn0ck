@@ -7,5 +7,6 @@ git clone https://github.com/KTanabe3/QuizKn0ck.git
 ```
 2. コンテナの起動
 ```bash
+cd src
 docker compose up
 ```
