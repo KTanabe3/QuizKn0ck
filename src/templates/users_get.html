@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+    <meta charset="UTF-8">
+    <title>ユーザ一覧</title>
+    <style>
+        body {
+            background: #646464;
+            height: 100vh;
+            position: relative;
+        }
+        h1 {
+            background: #D0B8A8;
+            color: #F8EDE3;
+            padding-left: 10%;
+            padding-top: 2%;
+            border-style: none;
+            border-radius: 25px 25px 0 0;
+        }
+        .string {
+            padding-top: 5px;
+            padding-bottom: 5px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            border-radius: 6px;
+            border-style: none;
+            background: #DFD3C3;
+            font-size: large;
+        }
+        .form {
+            width: 50vh;
+            height: 50vh;
+            padding: 0;
+            margin: 0 auto;
+            background: #F8EDE3;
+            border-radius: 25px;
+            position: relative;
+            top: 40%;
+            transform: translate(0, -50%);
+        }
+        .inputs {
+            margin: 0 auto;
+            width: 100%;
+            padding: 0;
+            border: 0;
+            display: flex;
+            justify-content: center;
+            position: absolute;
+            top: 50%;
+            transform: translate(0, -50%);
+        }
+        .role input {
+            display: none;
+        }
+        .role svg {
+            fill: #ddd;
+        }
+        .role label {
+            font-size: larger;
+            color: #ddd;
+            border: 2px solid #ddd;
+        }
+        .role input[type="radio"]:checked + .student-label {
+            color: #be7c50;
+            border: 2px solid #be7c50;
+            background: #D0B8A8;
+        }
+        .role input[type="radio"]:checked + .student-label svg {
+            fill: #be7c50;
+        }
+        .role input[type="radio"]:checked + .teacher-label {
+            color: #be7c50;
+            border: 2px solid #be7c50;
+            background: #D0B8A8;
+        }
+        .role input[type="radio"]:checked + .teacher-label svg {
+            fill: #be7c50;
+        }
+        .submit {
+            width: 70%;
+            height: 30px;
+            background: #8D493A;
+            color: #F8EDE3;
+            font-size: larger;
+            font-weight: 400;
+            border-style: none;
+            display: flex;
+            align-items: center;
+            padding-left: 20%;
+            position: relative;
+            top: 70px;
+            left: 35px;
+        }
+        .submit:hover {
+            background: #8b5548;
+        }
+        .submit:focus {
+            background: #8a3d2c;
+        }
+        .reset {
+            background: #c79350;
+            color: #F8EDE3;
+            font-size: 18px;
+            font-weight: 500;
+            border-style: none;
+            border-radius: 5px;
+            position: relative;
+            left: 85%;
+            bottom: 18px;
+        }
+        .reset:hover {
+            background: #e9a273;
+        }
+    </style>
+</head>
+<body>
+    <div class="form">
+        <h1>新規登録</h1>
+        <div class="inputs">
+            <form action="/users" method="POST">
+                <div><input name="user_name" class="string" required placeholder="Name"></input></div>
+                <div><input name="mail" class="string" required placeholder="E-Mail"></input></div>
+                <div><input type="password" name="password" class="string" required placeholder="Password"></input></div>
+                <div class="role">
+                    <input type="radio" name="role" value="" checked id="student">
+                    <label for="student" class="student-label"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -1000 960 700" width="24px" fill="#e8eaed"><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"/></svg>学生</label>
+                    <input type="radio" name="role" value="true" id="teacher">
+                    <label for="teacher" class="teacher-label"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -1000 960 700" width="24px" fill="#000000"><path d="M480-120 200-272v-240L40-600l440-240 440 240v320h-80v-276l-80 44v240L480-120Zm0-332 274-148-274-148-274 148 274 148Zm0 241 200-108v-151L480-360 280-470v151l200 108Zm0-241Zm0 90Zm0 0Z"/></svg>教師</label>
+                </div>
+                <div>
+                    <button type="submit" class="submit"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -1000 960 1000" width="24px" fill="#ffffff"><path d="M120-160v-640l760 320-760 320Zm80-120 474-200-474-200v140l240 60-240 60v140Zm0 0v-400 400Z"/></svg><p>Send</p></button>
+                    <button type="reset" class="reset"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="100 -1060 760 930" width="24px" fill="#ffffff"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
