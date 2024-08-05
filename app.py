@@ -1,11 +1,14 @@
 from flask import Flask, render_template, request, Response, redirect, url_for, Blueprint
+import random
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager, current_user, login_user, login_required, logout_user
-from models import db, User, quiz_quizsets, Quiz, QuizSet
+from models import db, User, quiz_quizsets, Quiz, QuizSet, Result
 from login import post_login, get_login, logout
 from register import get_users, post_users, get_users_id, post_users_id
-
+from quiz import make_quiz_get, make_quiz_post
+from quizset import make_quizset_get, make_quizset_post
+from answer import quizset_get, quizset_id_get, answer_get, answer_post, result_get
 app = Flask(__name__)
 
 DB_USER = "docker"
@@ -30,10 +33,23 @@ app.register_blueprint(post_users)
 app.register_blueprint(get_users_id)
 app.register_blueprint(post_users_id)
 
+app.register_blueprint(quizset_get)
+app.register_blueprint(quizset_id_get)
+app.register_blueprint(answer_get)
+app.register_blueprint(answer_post)
+app.register_blueprint(result_get)
+
+
+app.register_blueprint(make_quiz_get)
+app.register_blueprint(make_quiz_post)
+
+app.register_blueprint(make_quizset_get)
+app.register_blueprint(make_quizset_post)
+
+
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
-
 
 @app.route('/',methods=['GET'])
 def top_get():
@@ -42,59 +58,27 @@ def top_get():
 @app.route('/home',methods=['GET'])
 @login_required
 def home_get():
-    return render_template('home.html')
-
-
-@app.route("/quiz",methods=['GET'])
-def quiz_get():
-    quizsets = QuizSet.query.all()
-    return render_template('answer_quiz.html', quizsets=quizsets)
-
-@app.route("/make/quizset",methods=['GET'])
-def make_quizset_get():
-    quizzes = Quiz.query.all()
-    return render_template('make_quiz_set.html', quizzes=quizzes)
-
-@app.route("/make/quiz",methods=['GET'])
-def make_quiz_get():
-    return render_template('make_quiz.html')
+    quizsets = QuizSet.query.filter_by(author_id=current_user.id)
+    return render_template('home.html', quizsets=quizsets)
 
 @app.route("/view",methods=['GET'])
 def view_get():
-    return render_template('view_answer.html')
+    results = Result.query.filter_by(answerer_id=current_user.id)
+    return render_template('view_answer.html', results=results)
 
 @app.route("/owner_view",methods=['GET'])
 def owner_view_get():
-    return render_template('view_other_answer.html')
+    quizsets = QuizSet.query.filter_by(author_id=current_user.id)
+    return render_template('view_other_answer.html', quizsets=quizsets)
 
-@app.route("/make/quizset", methods=['POST'])
-def make_quizset():
-    quizset = QuizSet(
-        title=request.form["title"]
-    )
-    ids = request.form.getlist("id")
-    setted_quiz = []
-    for id in ids:
-        quiz = Quiz.query.get(id)
-        setted_quiz.append(quiz)
-    quizset.quiz = []
-    db.session.add(quizset)
-    db.session.commit()
-    return redirect(url_for('home_get'))
-
-@app.route("/make/quiz", methods=['POST'])
-def make_quiz():
-    quiz = Quiz(
-        title=request.form["title"],
-        text=request.form["text"],
-        ans=request.form["ans"],
-        cand1=request.form["cand1"],
-        cand2=request.form["cand2"],
-        cand3=request.form["cand3"]
-    )
-    db.session.add(quiz)
-    db.session.commit()
-    return redirect(url_for('home_get'))
+@app.route("/statistic/owner/<id>",methods=['GET'])
+def statistic_owner_get(id):
+    quizset = QuizSet.query.get(id)
+    results = Result.query.filter_by(quizset_id=quizset.id)
+    setted_results = []
+    for result in results:
+        setted_results.append([result.answerer,result.score,result.total])
+    return render_template('statistic_owner_id.html', quizset=quizset, setted_results=setted_results)
 
 db.init_app(app)
 

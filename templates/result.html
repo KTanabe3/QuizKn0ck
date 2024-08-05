@@ -3,8 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>回答結果</title>
+    <title>問題一覧</title>
     <style>
+        a {
+            text-decoration: none;
+        }
+        .btn--orange,
+        a.btn--orange  {
+            margin        : 3rem;
+            display       : inline-block;
+            border-radius : 10px;          /* 角丸       */
+            font-size     : 15pt;        /* 文字サイズ */
+            text-align    : center;      /* 文字位置   */
+            cursor        : pointer;     /* カーソル   */
+            padding       : 12px 27px;   /* 余白       */
+            background    : #8d493a;     /* 背景色     */
+            color         : #F8EDE3;     /* 文字色     */
+            line-height   : 1em;         /* 1行の高さ  */
+            transition    : .3s;         /* なめらか変化 */
+            border        : 2px solid #8d493a;    /* 枠の指定 */
+        }
+        a.btn--orange:hover {
+            box-shadow    : none;        /* カーソル時の影消去 */
+            color         : #8d493a;     /* 背景色     */
+            background    : #F8EDE3;     /* 文字色     */
+        }
+
+        .go a {
+            padding: 0.5rem 0.8rem;
+            margin: 2rem;
+        }
         header {
             position: relative;
             width: 100%;
@@ -32,10 +60,6 @@
             right: 1.5rem;
             transform: translateY(-50%);
         }
-        header .button:hover {
-            background:#AD695A;
-            border-radius: 10px;
-        }
         /* ボタンのデザイン */
         header .button a {
             display: block;
@@ -51,17 +75,14 @@
             border-radius: 10px;
         }
         h1 {
-            padding: 0.5em;
+            padding: 0.5rem;
         }
-        
+        h3 {
+            padding: 0 1.5rem;
+        }
         body {
             background-color: #F8EDE3;
-            margin:0;
-            padding:0;
-        }
-        a {
-            text-decoration: none;
-            color: black;
+            margin: 0;
         }
         table {
             background: #DFD3C3;
@@ -90,19 +111,30 @@
         <p class="button"><a href="/logout">ログアウト</a></p>
     </header>
 
-    <h1>あなたの解答状況</h1>
-
+    <h1>{{ quizset.title }}</h1>
+    <h3>正答数：{{ result.score }}/{{ result.total }}</h3>
     <table>
         <tr>
-            <th>クイズセット名</th>
-            <th>得点</th>
+            <th >問題</th>
+            <th >正答</th>
+            <th>あなたの回答</th>
         </tr>
-        {% for result in results %}
+        {% for answer in answers %}
         <tr>
-            <td>{{ result.quizset.title }}</td>
-            <td>{{ result.score }} / {{ result.total }}</td>
+            <th>{{ answer.quiz.title }}</th>
+            <th>{{ answer.ans }}</th>
+            <th>{{ answer.quiz.ans }}</th>
+
         </tr>
         {% endfor %}
+
     </table>
+    <div class="go">
+        <a href="/home" class="btn btn--orange btn--radius">
+            ホームに戻る
+        </a>
+    </div>
+    
+
 </body>
 </html>

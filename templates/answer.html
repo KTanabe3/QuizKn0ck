@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>問題回答</title>
+    <style>
+        a {
+            text-decoration: none;
+        }
+        body {
+            background-color: #F8EDE3;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            position: relative;
+            width: 100%;
+            line-height: 60px;
+            background: #646464;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        /* ロゴ */
+        header .logo {
+            padding: 0 20px;
+            margin: 5px;
+            font-size: 2rem;
+            letter-spacing: .2em;
+            text-decoration: none;
+        }
+        header .logo a {
+            text-decoration: none;
+            color: #FDF2E7;
+        }
+        /* ボタン */
+        header .button {
+            position: absolute;
+            top: 35%;
+            right: 1.5rem;
+            transform: translateY(-50%);
+        }
+        /* ボタンのデザイン */
+        header .button a {
+            display: block;
+            width: 120px;
+            height: 40px;
+            line-height: 40px;
+            background: #FDF2E7;
+            font-size: 14px;
+            color: #3c3c3c;
+            text-align: center;
+            letter-spacing: .2em;
+            text-indent: .2em;
+            border-radius: 10px;
+        }
+        table {
+            background: #DFD3C3;
+            box-shadow: 0px 0px 0px 10px #DFD3C3;/*線の外側*/
+            border: dashed 2px #8D493A;/*破線*/
+            border-radius: 9px;
+            margin-left: 20px;/*はみ出ないように調整*/
+            margin-right: 10px;/*はみ出ないように調整*/
+            padding: 0.5em;
+            width: 50%;
+        }
+        
+        th {
+            line-height: 1.5;
+        }
+        td {
+            line-height: 1.5;
+            padding: 0.5em 1em;
+            text-align: center;
+        }
+        form .button {
+            margin        : 3rem;
+            display       : inline-block;
+            border-radius : 10px;          /* 角丸       */
+            font-size     : 15pt;        /* 文字サイズ */
+            text-align    : center;      /* 文字位置   */
+            cursor        : pointer;     /* カーソル   */
+            padding       : 12px 27px;   /* 余白       */
+            background    : #8d493a;     /* 背景色     */
+            color         : #F8EDE3;     /* 文字色     */
+            line-height   : 1em;         /* 1行の高さ  */
+            transition    : .3s;         /* なめらか変化 */
+            border        : 2px solid #8d493a;    /* 枠の指定 */
+        }
+        form .button:hover {
+            box-shadow    : none;        /* カーソル時の影消去 */
+            color         : #8d493a;     /* 背景色     */
+            background    : #F8EDE3;     /* 文字色     */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <p class="logo"><a href="/home">QuizKn0ck</a></p>
+        <p class="button"><a href="/logout">ログアウト</a></p>
+    </header>
+    <form action="/quiz/{{ quizset.id }}/answer" method="POST">
+    <h1>解答してください</h1>
+
+    <table>
+        <tr>
+            <th >タイトル</th>
+            <th >問題文</th>
+            <th >選択肢1</th>
+            <th >選択肢2</th>
+            <th >選択肢3</th>
+            <th >選択肢4</th>
+        </tr>
+        {% for quiz in quizzes %}
+        <tr>
+            <td>{{ quiz.title }}</td>
+            <td>{{ quiz.text }}</td>
+            <td><input type="radio" name="quiz_{{quiz.id}}" value="{{ quiz.choices[0] }}" checked>{{ quiz.choices[0] }}</td>
+            <td><input type="radio" name="quiz_{{quiz.id}}" value="{{ quiz.choices[1] }}">{{ quiz.choices[1] }}</td>
+            <td><input type="radio" name="quiz_{{quiz.id}}" value="{{ quiz.choices[2] }}">{{ quiz.choices[2] }}</td>
+            <td><input type="radio" name="quiz_{{quiz.id}}" value="{{ quiz.choices[3] }}">{{ quiz.choices[3] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <div>
+        <input type="submit" value"送信する" class="button">
+    </div>
+    </form>
+
+
+</body>
+</html>

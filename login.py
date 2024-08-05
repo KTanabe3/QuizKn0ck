@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_login import LoginManager, current_user, login_user, login_required, logout_user
+from flask_login import current_user, login_user, logout_user
 from models import db, User
 
 post_login = Blueprint('post_login', __name__)
@@ -25,7 +25,7 @@ def login_post():
         # メッセージの表示
         flash('メールアドレスかパスワードが間違っています')
         # loginページへリダイレクト
-        return redirect(url_for('login_get'))
+        return redirect(url_for('get_login.login_get'))
 
     # ログインを承認
     login_user(user)
@@ -37,4 +37,4 @@ def logout_get():
     # logout_user関数を呼び出し
     logout_user()
     # トップページにリダイレクト
-    return redirect(url_for('home_get'))
+    return redirect(url_for('top_get'))

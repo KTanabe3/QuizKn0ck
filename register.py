@@ -17,7 +17,8 @@ def users_get():
 def users_post():
     user = User(
         name=request.form["user_name"],
-        mail=request.form["mail"]
+        mail=request.form["mail"],
+        role=bool(request.form["role"])
     )
     user.set_password(request.form["password"])
     db.session.add(user)

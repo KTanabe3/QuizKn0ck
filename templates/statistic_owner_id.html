@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ホーム</title>
+    <title>統計</title>
     <style>
         a {
             text-decoration: none;
@@ -35,6 +35,10 @@
             right: 1.5rem;
             transform: translateY(-50%);
         }
+        header .button:hover {
+            background:#AD695A;
+            border-radius: 10px;
+        }
         /* ボタンのデザイン */
         header .button a {
             display: block;
@@ -49,38 +53,29 @@
             text-indent: .2em;
             border-radius: 10px;
         }
-        h1 {
-            padding-left: 10px;
-        }
         body {
             background-color: #F8EDE3;
-            margin: 0;
+            margin:0;
+            padding:0;
         }
-
-        .main-content {
-            display:flex;
-            flex-flow: column;
-            height:auto;
-            margin:0 0 1em;
+        table {
+            background: #DFD3C3;
+            box-shadow: 0px 0px 0px 10px #DFD3C3;/*線の外側*/
+            border: dashed 2px #8D493A;/*破線*/
+            border-radius: 9px;
+            margin-left: 20px;/*はみ出ないように調整*/
+            margin-right: 10px;/*はみ出ないように調整*/
+            padding: 0.5em;
+            width: 30%;
         }
-        .content {
-            position:relative;
-            padding:1.6em;
+        
+        th {
+            line-height: 1.5;
+        }
+        td {
+            line-height: 1.5;
+            padding: 0.5em 1em;
             text-align: center;
-            background-color:#8D493A;
-            margin:1.3em auto;
-            width:40%;
-            border-radius: 1em;
-            transition:all .2s;
-        }
-        .content a {
-            position:absolute;
-            letter-spacing: 0.5em;
-            color: #F8EDE3;
-            padding: 1em;
-            top:0;
-            left:0;
-            width:100%;
         }
     </style>
 </head>
@@ -89,19 +84,19 @@
         <p class="logo"><a href="/home">QuizKn0ck</a></p>
         <p class="button"><a href="/logout">ログアウト</a></p>
     </header>
-    
-    <h1>ようこそ、{{ current_user.name }} {% if current_user.role %}先生{% else %}君{% endif %}</h1>
-    <div class="main-content">
-        <div class="content"><a href="/quiz">問題解答</a></div>
-        <div class="content"><a href="/make/quiz">問題作成</a></div>
-        {% if current_user.role %}
-        <div class="content"><a href="/make/quizset">問題セット作成</a></div>
-        {% endif %}
-        <div class="content"><a href="/view">あなたの解答</a></div>
-        {% if current_user.role %}
-        <div class="content"><a href="/owner_view">解答結果(作成者向け)</a></div>        
-        {% endif %}      
-    </div>
 
+    <h1>{{ quizset.title }} の解答状況</h1>
+    <table>
+        <tr>
+            <th>解答者</th>
+            <th>得点</th>
+        </tr>
+        {% for result in setted_results %}
+        <tr>
+            <td>{{ result[0].name }}</td>
+            <td>{{ result[1] }} / {{ result[2] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 </body>
 </html>
